@@ -333,7 +333,8 @@ class ScraperAppUi:
 def build_app():
     app_ui = ScraperAppUi()
     # Centered Header Container
-    with ui.column().classes("w-full max-w-6xl mx-auto p-4 gap-4"):
+    #w-full h-screen max-w-6xl mx-auto p-4 gap-4
+    with ui.column().classes("w-full h-screen max-w-6xl mx-auto p-4 gap-4"):
         ui.label("Portico Audit App: E-Book").classes("text-3xl font-bold text-slate-800 mb-2")
 
         # Two-Column Equal Split Row (items-start ensures top alignment across both columns)
@@ -353,7 +354,7 @@ def build_app():
 
                 # Step 2: Spreadsheet Execution Card
                 with ui.card().classes("w-full p-6 shadow-sm border border-slate-200"):
-                    ui.label("Step 2: Load spreadsheet & Execute")
+                    ui.label("Step 2: Load spreadsheet & Execute").classes("text-lg font-semibold mb-2")
                     ui.upload(on_upload=app_ui.handle_upload, auto_upload=True).props("accept=.xlsx").classes("w-full")
 
                     app_ui.run_btn = ui.button("Start Processing", on_click=app_ui.execute_scraping_pipeline)
@@ -388,4 +389,4 @@ if __name__ in {"__main__", "__mp_main__"}:
     # Define the root page context
     ui.page("/")(build_app)
     # Launch NiceGUI native window
-    ui.run(title="Portico E-Book App", native=True, reload=False, port=0)
+    ui.run(title="Portico E-Book App", window_size=(1000, 800), native=True, reload=False, port=0)

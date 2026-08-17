@@ -76,7 +76,7 @@ async def stream_result_to_excel(result_generator:AsyncGenerator[Dict[str, Any],
 
             # Fire non-blocking progress notification if UI callback provided
             if progress_callback and total_count > 0:
-                progress_val = round((processed_count/total_count), 2) * 100
+                progress_val = round((processed_count/total_count), 2)
                 await progress_callback(progress_val, f"Processed {processed_count}/{total_count} rows...")
         # Flush XML buffer and save file
         workbook.save(output_path)
