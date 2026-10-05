@@ -7,6 +7,7 @@ machine without requiring an external web server or complex hosting.
 import os
 import platform
 import subprocess
+import time
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional, List, Dict, Any
@@ -224,6 +225,8 @@ class ScraperAppUi:
         """
             Orchestrates memory-safe streaming extraction, fetching, and report creation.
             """
+        start_time = time.perf_counter()
+
         if not self.state.authenticated or not self.state.scraper:
             ui.notify("Please authenticate before executing batch tasks", type="warning")
             return
@@ -273,10 +276,13 @@ class ScraperAppUi:
             progress_callback=update_progress
         )
 
+        elapsed = (time.perf_counter() - start_time) / 60
         if self.status_log:
-            self.status_log.push(f"Pipeline Complete! Report saved to: {written_path.name}")
+            self.status_log.push(f"Pipeline Complete! Report saved to: {written_path.name}.")
+            self.status_log.push(f"Elapsed time: {elapsed:.2f} minutes.")
 
-        ui.notify("Audit completed successfully!", type="positive")
+
+        ui.notify(f"Audit check completed successfully in {elapsed:.2f} min!", type="positive")
 
         if self.download_btn:
             self.download_btn.enable()

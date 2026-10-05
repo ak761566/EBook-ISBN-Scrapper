@@ -1,5 +1,6 @@
 import asyncio
 import logging
+from html.parser import HTMLParser
 from typing import Any, AsyncGenerator, Dict, List, Tuple
 
 import httpx
@@ -50,7 +51,18 @@ class Searchbook:
                 content_list_json = json_response["data"]["content"]
                 #print(content_list_json)
                 if content_list_json:
-                    providers = [{"provider": item["providerName"]} for item in content_list_json]
+                    from selectolax.parser import HTMLParser
+                    audit_data = []
+                    providers = [{"provider": item["providerName"], "contentSet": item['contentSetName'], "title":item["sortTitle"]} for item in content_list_json]
+                    # for item in content_list_json:
+                    #     item_dict = {}
+                    #     tree = HTMLParser(item)
+                    #     item_dict["provider"] = item["providerName"]
+                    #     item_dict["contentSet"] = item["contentSetName"]
+                    #     item_dict['title'] = item["sortTitle"]
+                    #     audit_data.append(item_dict)
+                    #
+                    # print(audit_data)
                     return {"row_idx": row_idx, "batch_name":batch_name, "isbn":keyword, "data":providers, "error": "none"}
                 else:
                     return {"row_idx": row_idx, "batch_name":batch_name, "isbn":keyword, "data": "Not Available", "error": "none"}
@@ -82,8 +94,8 @@ class Searchbook:
 async def main():
     from test_login_manager import driver
     search_book = Searchbook(driver)
-    # print(search_book.header)
-    # print(search_book.cookies)
+    print(search_book.header)
+    print(search_book.cookies)
     # indexed_input = [(2, '9780915027002'), (3, '9780915027019'), (4, '9780915027026'), (5, '9789630538329'),
     #                  (6, '9789630538954'), (7, '9789630541305'), (8, '9789630543668'), (9, '9789630543675'),
     #                  (10, '9789630548441')]
